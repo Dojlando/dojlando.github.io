@@ -33,6 +33,25 @@
         margin: 4px 8px;
         border: 1px solid #ddd;
         border-radius: 4px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      input:invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+      }
+
+      input:focus:invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
       }
       output {
         display: inline-block;
@@ -83,15 +102,42 @@
         background: white;
         border-radius: 0 0 4px 4px;
       }
+
+      .form-row details {
+        margin: 8px 0 0 0;
+        border: none;
+        border-radius: 0;
+      }
+
+      .form-row summary {
+        background: transparent;
+        padding: 4px 0;
+        font-size: 0.85em;
+        font-weight: normal;
+        color: #666;
+        border-radius: 0;
+      }
+
+      .form-row summary:hover {
+        background: transparent;
+        color: #333;
+      }
+
+      .form-row details[open] summary {
+        border-radius: 0;
+        border-bottom: none;
+      }
+
+      .form-row details p {
+        padding: 8px 0;
+        background: transparent;
+        border-radius: 0;
+        font-size: 0.85em;
+        color: #666;
+        line-height: 1.4;
+      }
       .form-row {
         margin-bottom: 16px;
-      }
-      .description {
-        font-size: 0.9em;
-        color: #666;
-        margin-left: 128px;
-        margin-top: 2px;
-        font-style: italic;
       }
 
       @media (max-width: 768px) {
@@ -108,10 +154,6 @@
 
         form {
           padding: 16px;
-        }
-
-        .form-row {
-          margin-bottom: 16px;
         }
 
         label {
@@ -132,13 +174,6 @@
           margin-left: 0;
           margin-top: 8px;
           font-size: 1em;
-        }
-
-        .description {
-          margin-left: 0;
-          margin-top: 8px;
-          font-size: 0.85em;
-          line-height: 1.4;
         }
 
         button {
@@ -307,13 +342,18 @@
           min="4"
           max="85"
           inputmode="decimal"
+          pattern="^([4-9]|[1-7][0-9]|8[0-5])(\.\d)?$"
+          title="Ange ett CRL-värde mellan 4 och 85 mm (t.ex. 25.5)"
         />
         <output id="crlResult">Graviditetslängd:</output>
-        <div class="description">
-          <b>CRL</b>, vars korrekta mätning fràn hjässa till säte, kan användas
-          om CRL ăr 4-85 mm, men rekommenderas i andra hand om BPD är 21 mm
-          eller mer.
-        </div>
+        <details>
+          <summary>Information om CRL</summary>
+          <p>
+            <b>CRL</b>, vars korrekta mätning fràn hjässa till säte, kan
+            användas om CRL ăr 4-85 mm, men rekommenderas i andra hand om BPD är
+            21 mm eller mer.
+          </p>
+        </details>
       </div>
 
       <div class="form-row">
@@ -326,12 +366,17 @@
           min="21"
           max="55"
           inputmode="decimal"
+          pattern="^(2[1-9]|[3-4][0-9]|5[0-5])(\.\d)?$"
+          title="Ange ett BPD-värde mellan 21 och 55 mm (t.ex. 35.2)"
         />
         <output id="bpdResult">Graviditetslängd:</output>
-        <div class="description">
-          <b>BPD</b>, vars korrekta mätning från utsida till insida, används vid
-          BPD 21-55 mm.
-        </div>
+        <details>
+          <summary>Information om BPD</summary>
+          <p>
+            <b>BPD</b>, vars korrekta mätning från utsida till insida, används
+            vid BPD 21-55 mm.
+          </p>
+        </details>
       </div>
 
       <div class="form-row">
@@ -344,12 +389,17 @@
           min="15"
           max="35"
           inputmode="decimal"
+          pattern="^(1[5-9]|[2-3][0-5])(\.\d)?$"
+          title="Ange ett femur-värde mellan 15 och 35 mm (t.ex. 22.8)"
         />
         <output id="femurResult">Graviditetslängd:</output>
-        <div class="description">
-          <b>Femur</b>, används i andra hand för graviditetslängds-bestämning då
-          BPD ej kan mätas, t ex vid akrani, och gäller för femur 15-35 mm.
-        </div>
+        <details>
+          <summary>Information om Femur</summary>
+          <p>
+            <b>Femur</b>, används i andra hand för graviditetslängds-bestämning
+            då BPD ej kan mätas, t ex vid akrani, och gäller för femur 15-35 mm.
+          </p>
+        </details>
       </div>
 
       <div class="form-row">
@@ -360,13 +410,18 @@
           name="ofd"
           step="0.1"
           inputmode="decimal"
+          pattern="^\d+(\.\d)?$"
+          title="Ange ett OFD-värde i mm (t.ex. 45.3)"
         />
         <output id="ofdResult">Graviditetslängd: (Kräver BPD-värde)</output>
-        <div class="description">
-          <b>HO eller HC</b> (huvudomkrets, huvudcirkumferens), används endast
-          vid onormal huvudform, beräknas från BPD (yttre-yttre) och OFD
-          (occipito-frontal diameter).
-        </div>
+        <details>
+          <summary>Information om OFD</summary>
+          <p>
+            <b>HO eller HC</b> (huvudomkrets, huvudcirkumferens), används endast
+            vid onormal huvudform, beräknas från BPD (yttre-yttre) och OFD
+            (occipito-frontal diameter).
+          </p>
+        </details>
       </div>
 
       <button type="reset">Rensa</button>
