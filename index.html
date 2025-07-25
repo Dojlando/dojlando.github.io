@@ -299,7 +299,15 @@
     <form>
       <div class="form-row">
         <label for="crl">CRL (mm):</label>
-        <input type="number" id="crl" name="crl" step="0.1" min="4" max="85" />
+        <input
+          type="number"
+          id="crl"
+          name="crl"
+          step="0.1"
+          min="4"
+          max="85"
+          inputmode="decimal"
+        />
         <output id="crlResult">Graviditetslängd:</output>
         <div class="description">
           <b>CRL</b>, vars korrekta mätning fràn hjässa till säte, kan användas
@@ -310,7 +318,15 @@
 
       <div class="form-row">
         <label for="bpd">BPD (mm):</label>
-        <input type="number" id="bpd" name="bpd" step="0.1" min="21" max="55" />
+        <input
+          type="number"
+          id="bpd"
+          name="bpd"
+          step="0.1"
+          min="21"
+          max="55"
+          inputmode="decimal"
+        />
         <output id="bpdResult">Graviditetslängd:</output>
         <div class="description">
           <b>BPD</b>, vars korrekta mätning från utsida till insida, används vid
@@ -327,6 +343,7 @@
           step="0.1"
           min="15"
           max="35"
+          inputmode="decimal"
         />
         <output id="femurResult">Graviditetslängd:</output>
         <div class="description">
@@ -337,7 +354,13 @@
 
       <div class="form-row">
         <label for="ofd">OFD (mm):</label>
-        <input type="number" id="ofd" name="ofd" step="0.1" />
+        <input
+          type="number"
+          id="ofd"
+          name="ofd"
+          step="0.1"
+          inputmode="decimal"
+        />
         <output id="ofdResult">Graviditetslängd: (Kräver BPD-värde)</output>
         <div class="description">
           <b>HO eller HC</b> (huvudomkrets, huvudcirkumferens), används endast
