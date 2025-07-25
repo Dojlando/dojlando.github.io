@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Graviditetslängd estimering</title>
     <style>
       body {
@@ -50,6 +52,37 @@
       button:hover {
         background: #2980b9;
       }
+
+      details {
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      summary {
+        background: #f8f9fa;
+        padding: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #495057;
+        border-radius: 4px;
+      }
+
+      summary:hover {
+        background: #e9ecef;
+      }
+
+      details[open] summary {
+        border-radius: 4px 4px 0 0;
+        border-bottom: 1px solid #ddd;
+      }
+
+      details p {
+        padding: 16px;
+        margin: 0;
+        background: white;
+        border-radius: 0 0 4px 4px;
+      }
       .form-row {
         margin-bottom: 16px;
       }
@@ -59,6 +92,71 @@
         margin-left: 128px;
         margin-top: 2px;
         font-style: italic;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          margin: 16px auto;
+          padding: 8px;
+          max-width: 100%;
+        }
+
+        h1 {
+          font-size: 1.5em;
+          margin-bottom: 16px;
+        }
+
+        form {
+          padding: 16px;
+        }
+
+        .form-row {
+          margin-bottom: 16px;
+        }
+
+        label {
+          display: block;
+          width: 100%;
+          margin-bottom: 4px;
+        }
+
+        input {
+          width: 80px;
+          padding: 8px;
+          margin: 4px 0;
+          font-size: 16px;
+        }
+
+        output {
+          display: block;
+          margin-left: 0;
+          margin-top: 8px;
+          font-size: 1em;
+        }
+
+        .description {
+          margin-left: 0;
+          margin-top: 8px;
+          font-size: 0.85em;
+          line-height: 1.4;
+        }
+
+        button {
+          width: 100%;
+          padding: 12px;
+          font-size: 16px;
+          margin-top: 16px;
+        }
+
+        summary {
+          padding: 12px;
+          font-size: 16px;
+        }
+
+        details p {
+          padding: 12px;
+          font-size: 1em;
+        }
       }
     </style>
     <script type="module">
@@ -184,16 +282,20 @@
   </head>
   <body>
     <h1>Graviditetslängd estimering</h1>
-    <p>
-      Sorterna är i mm och dagar om inte annat anges. Mätningarna görs i mm med
-      en noggrannhet pà 1 decimal. Medelvärdet av tre mätningar används och det
-      räcker att använda sig av en decimal vid inmatning i program för att
-      beräkna graviditetslängden. Det är vid BPD-mätning särskilt viktigt att
-      använda sig av en decimal vid dateringarna eftersom BPD tillväxer med en
-      takt pa mindre ăn 1 mm per dygn. Vid datering med hela mm täcker man inte
-      in alla dagar som en graviditetslängd kan ha utan endast varannan eller
-      var tredje dag.
-    </p>
+
+    <details>
+      <summary>Mätningar och noggrannhet</summary>
+      <p>
+        Sorterna är i mm och dagar om inte annat anges. Mätningarna görs i mm
+        med en noggrannhet pà 1 decimal. Medelvärdet av tre mätningar används
+        och det räcker att använda sig av en decimal vid inmatning i program för
+        att beräkna graviditetslängden. Det är vid BPD-mätning särskilt viktigt
+        att använda sig av en decimal vid dateringarna eftersom BPD tillväxer
+        med en takt pa mindre ăn 1 mm per dygn. Vid datering med hela mm täcker
+        man inte in alla dagar som en graviditetslängd kan ha utan endast
+        varannan eller var tredje dag.
+      </p>
+    </details>
     <form>
       <div class="form-row">
         <label for="crl">CRL (mm):</label>
