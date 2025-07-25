@@ -203,8 +203,11 @@
         return null;
       }
 
-      function formatResult(pregnacyLength, suffix = "dagar") {
-        return `Graviditetslängd: ${Math.round(pregnacyLength * 10) / 10} ${suffix}`;
+      function formatResult(pregnacyLength) {
+        const weeks = Math.floor(pregnacyLength / 7);
+        const days = Math.round(pregnacyLength % 7);
+
+        return `Graviditetslängd: ${weeks}v + ${days}d`;
       }
 
       function initCalculator(inputId, resultId, validationFn, calculationFn) {
@@ -289,7 +292,7 @@
               0.010611 * ho -
               0.000030321 * ho ** 2 +
               4.3498e-8 * ho ** 3);
-          ofdResultElement.textContent = formatResult(pregnacyLength, "veckor");
+          ofdResultElement.textContent = formatResult(pregnacyLength * 7); // Convert to days
         }
 
         ofdElement.addEventListener("input", calculateOFD);
@@ -321,11 +324,11 @@
       <summary>Mätningar och noggrannhet</summary>
       <p>
         Sorterna är i mm och dagar om inte annat anges. Mätningarna görs i mm
-        med en noggrannhet pà 1 decimal. Medelvärdet av tre mätningar används
+        med en noggrannhet på 1 decimal. Medelvärdet av tre mätningar används
         och det räcker att använda sig av en decimal vid inmatning i program för
         att beräkna graviditetslängden. Det är vid BPD-mätning särskilt viktigt
         att använda sig av en decimal vid dateringarna eftersom BPD tillväxer
-        med en takt pa mindre ăn 1 mm per dygn. Vid datering med hela mm täcker
+        med en takt pa mindre än 1 mm per dygn. Vid datering med hela mm täcker
         man inte in alla dagar som en graviditetslängd kan ha utan endast
         varannan eller var tredje dag.
       </p>
@@ -348,9 +351,15 @@
         <details>
           <summary>Information om CRL</summary>
           <p>
-            <b>CRL</b>, vars korrekta mätning fràn hjässa till säte, kan
-            användas om CRL ăr 4-85 mm, men rekommenderas i andra hand om BPD är
-            21 mm eller mer.
+            <b>CRL</b>, vars korrekta mätning från hjässa till säte, kan
+            användas om CRL är 4-85 mm, men rekommenderas i andra hand om BPD är
+            21 mm eller mer. <br /><br />
+            <img
+              src="CRL.webp"
+              alt="CRL mätning"
+              style="max-width: 100%; height: auto"
+              loading="lazy"
+            />
           </p>
         </details>
       </div>
@@ -373,7 +382,13 @@
           <summary>Information om BPD</summary>
           <p>
             <b>BPD</b>, vars korrekta mätning från utsida till insida, används
-            vid BPD 21-55 mm.
+            vid BPD 21-55 mm. <br /><br />
+            <img
+              src="BPD.webp"
+              alt="BPD mätning"
+              style="max-width: 100%; height: auto"
+              loading="lazy"
+            />
           </p>
         </details>
       </div>
@@ -397,6 +412,13 @@
           <p>
             <b>Femur</b>, används i andra hand för graviditetslängds-bestämning
             då BPD ej kan mätas, t ex vid akrani, och gäller för femur 15-35 mm.
+            <br /><br />
+            <img
+              src="FL.webp"
+              alt="Femur mätning"
+              style="max-width: 100%; height: auto"
+              loading="lazy"
+            />
           </p>
         </details>
       </div>
@@ -418,7 +440,13 @@
           <p>
             <b>HO eller HC</b> (huvudomkrets, huvudcirkumferens), används endast
             vid onormal huvudform, beräknas från BPD (yttre-yttre) och OFD
-            (occipito-frontal diameter).
+            (occipito-frontal diameter). <br /><br />
+            <img
+              src="OFD.webp"
+              alt="OFD mätning"
+              style="max-width: 100%; height: auto"
+              loading="lazy"
+            />
           </p>
         </details>
       </div>
