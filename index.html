@@ -1,11 +1,250 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <title>Test test</title>
+    <title>Graviditetslängd estimering</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      form {
+        background: #f4f4f4;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+      label {
+        display: inline-block;
+        width: 120px;
+        font-weight: bold;
+      }
+      input {
+        width: 100px;
+        padding: 4px;
+        margin: 4px 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      output {
+        display: inline-block;
+        margin-left: 8px;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      button {
+        background: #3498db;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+      button:hover {
+        background: #2980b9;
+      }
+      .form-row {
+        margin-bottom: 16px;
+      }
+      .description {
+        font-size: 0.9em;
+        color: #666;
+        margin-left: 128px;
+        margin-top: 2px;
+        font-style: italic;
+      }
+    </style>
+    <script type="module">
+      function validateInput(value, min, max, fieldName) {
+        if (isNaN(value)) return `Ange ett giltigt ${fieldName}-värde`;
+        if (value < min || value > max) {
+          return `Ange ett giltigt ${fieldName}-värde mellan ${min} och ${max} mm.`;
+        }
+        return null;
+      }
+
+      function formatResult(pregnacyLength, suffix = "dagar") {
+        return `Graviditetslängd: ${Math.round(pregnacyLength * 10) / 10} ${suffix}`;
+      }
+
+      function initCalculator(inputId, resultId, validationFn, calculationFn) {
+        const inputElement = document.getElementById(inputId);
+        const resultElement = document.getElementById(resultId);
+
+        function calculate() {
+          const value = parseFloat(inputElement.value);
+          const validationError = validationFn(value);
+
+          if (validationError) {
+            resultElement.textContent = validationError;
+            return;
+          }
+
+          const pregnacyLength = calculationFn(value);
+          resultElement.textContent = formatResult(pregnacyLength);
+        }
+
+        inputElement.addEventListener("input", calculate);
+
+        if (inputElement.value) {
+          calculate();
+        }
+      }
+
+      initCalculator(
+        "crl",
+        "crlResult",
+        (value) => validateInput(value, 4, 85, "CRL"),
+        (crlValue) => 8.052 * (crlValue * 1.037) ** 0.5 + 23.73,
+      );
+
+      initCalculator(
+        "bpd",
+        "bpdResult",
+        (value) => validateInput(value, 21, 55, "BPD"),
+        (bpdValue) => 58.65 + 1.07 * bpdValue + 0.0138 * bpdValue ** 2,
+      );
+
+      initCalculator(
+        "femur",
+        "femurResult",
+        (value) => validateInput(value, 15, 35, "femur"),
+        (femurValue) =>
+          30.7 +
+          6.95 * femurValue -
+          0.202 * femurValue ** 2 +
+          0.00337 * femurValue ** 3 -
+          0.0000181 * femurValue ** 4,
+      );
+
+      function ofdInit() {
+        const ofdElement = document.getElementById("ofd");
+        const bpdElement = document.getElementById("bpd");
+        const ofdResultElement = document.getElementById("ofdResult");
+
+        function calculateOFD() {
+          const ofdValue = parseFloat(ofdElement.value);
+          const bpdValue = parseFloat(bpdElement.value);
+
+          if (isNaN(ofdValue) || ofdValue <= 0) {
+            if (ofdElement.value !== "") {
+              ofdResultElement.textContent = "Ange ett giltigt OFD-värde (mm)";
+            } else {
+              ofdResultElement.textContent =
+                "Graviditetslängd: (Kräver BPD-värde)";
+            }
+            return;
+          }
+
+          if (isNaN(bpdValue) || bpdValue < 21 || bpdValue > 55) {
+            ofdResultElement.textContent =
+              "Ange först ett giltigt BPD-värde (21-55 mm) för OFD-beräkning";
+            return;
+          }
+
+          const ho = (bpdValue + ofdValue) * 1.57;
+          const pregnacyLength =
+            Math.E **
+            (1.848 +
+              0.010611 * ho -
+              0.000030321 * ho ** 2 +
+              4.3498e-8 * ho ** 3);
+          ofdResultElement.textContent = formatResult(pregnacyLength, "veckor");
+        }
+
+        ofdElement.addEventListener("input", calculateOFD);
+        bpdElement.addEventListener("input", calculateOFD);
+
+        if (ofdElement.value || bpdElement.value) {
+          calculateOFD();
+        }
+      }
+      ofdInit();
+
+      document
+        .querySelector('button[type="reset"]')
+        .addEventListener("click", function () {
+          document.getElementById("crlResult").textContent =
+            "Graviditetslängd:";
+          document.getElementById("bpdResult").textContent =
+            "Graviditetslängd:";
+          document.getElementById("femurResult").textContent =
+            "Graviditetslängd:";
+          document.getElementById("ofdResult").textContent =
+            "Graviditetslängd: (Kräver BPD-värde)";
+        });
+    </script>
   </head>
   <body>
-    <h1>Hello world!</h1>
-    <p>Testing</p>
+    <h1>Graviditetslängd estimering</h1>
+    <p>
+      Sorterna är i mm och dagar om inte annat anges. Mätningarna görs i mm med
+      en noggrannhet pà 1 decimal. Medelvärdet av tre mätningar används och det
+      räcker att använda sig av en decimal vid inmatning i program för att
+      beräkna graviditetslängden. Det är vid BPD-mätning särskilt viktigt att
+      använda sig av en decimal vid dateringarna eftersom BPD tillväxer med en
+      takt pa mindre ăn 1 mm per dygn. Vid datering med hela mm täcker man inte
+      in alla dagar som en graviditetslängd kan ha utan endast varannan eller
+      var tredje dag.
+    </p>
+    <form>
+      <div class="form-row">
+        <label for="crl">CRL (mm):</label>
+        <input type="number" id="crl" name="crl" step="0.1" min="4" max="85" />
+        <output id="crlResult">Graviditetslängd:</output>
+        <div class="description">
+          <b>CRL</b>, vars korrekta mätning fràn hjässa till säte, kan användas
+          om CRL ăr 4-85 mm, men rekommenderas i andra hand om BPD är 21 mm
+          eller mer.
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="bpd">BPD (mm):</label>
+        <input type="number" id="bpd" name="bpd" step="0.1" min="21" max="55" />
+        <output id="bpdResult">Graviditetslängd:</output>
+        <div class="description">
+          <b>BPD</b>, vars korrekta mätning från utsida till insida, används vid
+          BPD 21-55 mm.
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="femur">Femur (mm):</label>
+        <input
+          type="number"
+          id="femur"
+          name="femur"
+          step="0.1"
+          min="15"
+          max="35"
+        />
+        <output id="femurResult">Graviditetslängd:</output>
+        <div class="description">
+          <b>Femur</b>, används i andra hand för graviditetslängds-bestämning då
+          BPD ej kan mätas, t ex vid akrani, och gäller för femur 15-35 mm.
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="ofd">OFD (mm):</label>
+        <input type="number" id="ofd" name="ofd" step="0.1" />
+        <output id="ofdResult">Graviditetslängd: (Kräver BPD-värde)</output>
+        <div class="description">
+          <b>HO eller HC</b> (huvudomkrets, huvudcirkumferens), används endast
+          vid onormal huvudform, beräknas från BPD (yttre-yttre) och OFD
+          (occipito-frontal diameter).
+        </div>
+      </div>
+
+      <button type="reset">Rensa</button>
+    </form>
   </body>
 </html>
-
